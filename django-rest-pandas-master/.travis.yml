@@ -1,0 +1,22 @@
+language: python
+sudo: false
+python:
+ - "2.7"
+ - "3.4"
+ - "3.5"
+env:
+  matrix:
+    - DJANGO="django==1.8.16"
+    - DJANGO="django==1.9.11"
+    - DJANGO="django==1.10.3"
+    - DJANGO="django==1.10.3" LINT=1
+  global:
+    - REST="djangorestframework==3.5.3"
+    - PANDAS="pandas>=0.18"
+install:
+ - pip install --upgrade pip
+ - pip install $DJANGO $REST $PANDAS
+ - pip install matplotlib
+ - pip install flake8
+script:
+ - ./runtests.sh

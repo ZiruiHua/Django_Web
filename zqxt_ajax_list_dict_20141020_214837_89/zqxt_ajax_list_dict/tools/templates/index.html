@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {# google chart api #}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<form method="get" >
+    <div class="form-group">
+        <h4><label for="boot-multiselect-demo">Select Brands:</label></h4>
+        <h6><label for="boot-multiselect-demo">Press Crtl and click</label></h6>
+        <div class="example">
+            <select class='form-control' id="boot-multiselect-demo" multiple>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+    </div>
+    <div>
+
+        <button type="button" class="btn btn-default" id='sum1'>submit</button>
+        <p>result: <span id='result1'></span></p>
+
+    </div>
+</div>
+</form>
+
+
+<p>请输入两个数字</p>
+<form  method="get">
+    a: <input type="text" id="a" name="a"> <br>
+    b: <input type="text" id="b" name="b"> <br>
+    <p>result: <span id='result'></span></p>
+    <button type="button" id='sum'>提交</button>
+</form>
+<div id='chart'></div>
+
+<div id="dict">Ajax 加载字典</div>
+<p id="dict_result"></p>
+
+<div id="list">Ajax 加载列表</div>
+<p id="list_result"></p>
+<div id='curve_chart'></div>
+
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+      // 求和 a + b
+      $("#sum").click(function(){
+        var a = $("#a").val();
+        var b = $("#b").val();
+
+        $.get("/add/",{'a':a,'b':b}, function(ret){
+            $('#result').html(ret);
+        })
+      });
+
+      $("#sum1").click(function(){
+        var array1 = $("#boot-multiselect-demo").val();
+        var json_array1 = JSON.stringify(array1);
+        console.log(json_array1)
+        $.get("/add1/",{'a':json_array1}, function(ret){
+            $('#result1').html(ret);
+        })
+      });
+
+      // 列表 list
+      $('#list').click(function(){
+          $.getJSON('/ajax_list/',function(ret){
+            //返回值 ret 在这里是一个列表
+            for (var i = ret.length - 1; i >= 0; i--) {
+              // 把 ret 的每一项显示在网页上
+              $('#list_result').append(' ' + ret[i])
+            };
+          })
+      })
+
+      // 字典 dict
+      $('#dict').click(function(){
+          $.getJSON('/ajax_dict/',function(ret){
+              //返回值 ret 在这里是一个字典
+              $('#dict_result').append(ret.twz + '<br>');
+              // 也可以用 ret['twz']
+
+              drawChart(ret.twz)
+          })
+      })
+    });
+</script>
+
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+  try{
+  function drawChart(list) {
+    var data = google.visualization.arrayToDataTable(list);
+    var options = {
+      title: 'Company Performance',
+      curveType: 'function',
+      legend: { position: 'bottom' }
+  };
+  var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+  chart.draw(data, options);
+    }
+  }
+  catch(err) {
+    alert('error')
+  }
+
+</script>
+</body>
+</html>
+

@@ -4,7 +4,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'autohome_pages.views.base', name='home1'),
+    url(r'^$', 'autohome_pages.views.base', name='index'),
+    url(r'^dashboard$', 'autohome_pages.views.dashboard', name='dashboard'),
     url(r'^level1$', 'autohome_pages.views.level1chart', name='level1'),
     url(r'^level1Page$', 'autohome_pages.views.level1ChartPage', name='level1Page'),
     url(r'^level2$', 'autohome_pages.views.level2chart', name='level2'),

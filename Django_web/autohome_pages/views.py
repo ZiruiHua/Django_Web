@@ -9,6 +9,9 @@ from Connect_DB import getCarOwner,getColumnChart_p1,getLevel1Attributes,getLeve
 
 
 def base(request):
+    return render(request, 'index.html')
+
+def dashboard(request):
     return render(request, 'base.html')
 
 def carOwnerChartPage(request):
